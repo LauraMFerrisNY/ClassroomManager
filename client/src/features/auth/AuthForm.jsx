@@ -1,4 +1,5 @@
-import { useState } from "react";
+import 'dotenv/config'
+import { useState , useEffect } from "react";
 import { useLoginMutation, useRegisterMutation } from "./authSlice";
 
 /**
@@ -39,6 +40,26 @@ function AuthForm() {
     }
   }
 
+  useEffect(() => {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const codeParam = urlParams.get("code");
+    console.log(codeParam);
+  }, []);
+
+  async function attepmtGitHubAuth() {
+    setError(null);
+    window.location.assign("https://github.com/login/oauth/authorize?client_id=" + process.env.GITHUB_OAUTH_CLIENT_ID);
+
+    // try {
+    //   setLoading(true);
+      
+    // } catch (error) {
+    //   setLoading(false);
+    //   setError(error.data);
+    // }
+  }
+
   return (
     <main>
       <h1>{authType}</h1>
@@ -65,6 +86,7 @@ function AuthForm() {
         </label>
         <button type="submit">{authType}</button>
       </form>
+      <button id="github-btn" onClick={attepmtGitHubAuth}>{authType} with Github</button>
       <p>
         {oppositeAuthCopy}{" "}
         <a
